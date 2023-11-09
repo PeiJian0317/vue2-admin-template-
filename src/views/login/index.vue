@@ -17,7 +17,6 @@
           </el-form-item>
           <el-form-item>
             <el-button style="width: 350px" @click="login" type="primary">登录</el-button>
-            <el-button style="width: 350px" @click="testapi" type="primary">测试接口</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -25,8 +24,6 @@
   </div>
 </template>
 <script>
-import { login } from '@/api/user';
-import axios from 'axios';
 
 export default {
   name: "Login",
@@ -86,17 +83,7 @@ export default {
         }
       })
     },
-    testapi(){
-      axios({
-        url:'/api/sys/login',
-        method:'post',
-        data:{
-          mobile:'123124124',
-          password:'123456'
-        }
-
-      })
-    }
+    
   }
 };
 </script>

@@ -4,7 +4,7 @@ import { Message } from 'element-ui'
 //创建一个新的axios实例
 const service = axios.create({
   baseURL:process.env.VUE_APP_BASE_API, //基础地址
-  timeout: 10000
+  timeout: 50000
 })
 
 //请求拦截器
@@ -21,6 +21,8 @@ service.interceptors.request.use((config) =>{
 //响应拦截器
 service.interceptors.response.use((response) =>{
   const {data,message,success} = response.data
+  //对接口文档的响应体进行分析,发现这三个是每个接口都有的,所以把他们解构
+  //如果success为true就返回解构的data
   if(success){
     return data
   }else{

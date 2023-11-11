@@ -7,7 +7,7 @@ import store from '@/store'
 const whitelist = ['/login','/404']
 
 //前置守卫
-router.beforeEach((to,from,next) =>{
+router.beforeEach(async (to,from,next) =>{
   nprogress.start()
   if(store.getters.token){
     //存在token
@@ -16,7 +16,10 @@ router.beforeEach((to,from,next) =>{
       next('/') //注意细节,如果next里有地址,那么不会执行后置守卫
       nprogress.done()
     }else{
-      next() //放行
+      if(!store.getters.userId){
+       await store.dispatch('user/getUserInfo')
+      }
+      next()
     }
   }else{
     //没有token

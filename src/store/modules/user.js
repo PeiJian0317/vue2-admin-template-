@@ -3,7 +3,7 @@ import { login,getUserInfo } from '@/api/user'
 
 const state = {
   token: getToken(), //从缓存中读取初始值
-  userInfo:{}
+  userInfo:{} //存储用户基本资料
 }
 
 const actions = {
@@ -13,7 +13,7 @@ const actions = {
     context.commit('setToken',token)
 
   },
-  
+
   //获取用户基本资料
   async getUserInfo(context){
    const result = await getUserInfo()

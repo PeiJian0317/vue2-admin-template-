@@ -1,24 +1,11 @@
 import request from '@/utils/request'
 
-export function login(data) {
+//封装API
+export function login(data){
+  //request就是axios,只不过进行了封装
   return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
+    url:'/sys/login',
+    method:'post',
     data
-  })
-}
-
-export function getInfo(token) {
-  return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
-  })
-}
-
-export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
   })
 }

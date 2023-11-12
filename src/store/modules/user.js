@@ -18,6 +18,11 @@ const actions = {
   async getUserInfo(context){
    const result = await getUserInfo()
    context.commit('setUserInfo',result)
+  },
+  //退出登录的action
+  logout(context){
+    context.commit("removeToken")
+    context.commit('setUserInfo',{})
   }
 }
 
@@ -29,7 +34,7 @@ const mutations = {
     setToken(token)
   },
   //登出时清除Cookie
-  removeToken(){
+  removeToken(state){
     //清除缓存,state里的token也清空
     state.token = null
     removeToken()

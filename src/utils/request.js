@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { Message } from 'element-ui'
+import router from '@/router'
 //创建一个新的axios实例
 const service = axios.create({
   baseURL:process.env.VUE_APP_BASE_API, //基础地址
@@ -30,7 +31,15 @@ service.interceptors.response.use((response) =>{
     //错误执行,由于里面没有错误对象,所以自己new一个
     return Promise.reject(new Error(message))
   }
-},(error)=>{
+},async (error)=>{
+  if(error.response.status === 401){
+    //401表示token超时
+    Message({ type:"error",message: 'token超时了'})
+    await store.dispatch('user/logout') //调用action 退出登录
+    //主动跳转到登录页面
+    router.push('/login')
+    return Promise.reject(error)
+  }
   Message({ type:"error",message: error.message})
   return Promise.reject(error)
 })

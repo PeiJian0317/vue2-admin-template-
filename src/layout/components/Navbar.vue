@@ -24,7 +24,8 @@
           <a target="_blank" href="https://gitee.com/peijian0317/vue2-admin-template">
             <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+          <!-- 用prevent修饰符阻止a标签默认事件 -->
+          <a target="_blank" @click.prevent="updatePassword">
             <el-dropdown-item>修改密码</el-dropdown-item>
           </a>
           <!-- native事件修饰符 -->
@@ -35,6 +36,32 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <!-- 放置dialog -->
+    <!-- .sync可以接收组件传过来的事件和值,也就是说我点击×按钮,.sync会知道,这是组件源码写的 -->
+    <el-dialog width="500px" 
+     title="修改密码"  
+     :visible.sync="showDialog" 
+     :append-to-body="true"
+     :close-on-click-modal="false"
+     @close="btnCancel()"
+     >
+      <!-- 放置表单 -->
+      <el-form ref="passForm" label-width="120px" :model="passForm" :rules="rules">
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input  show-password size="small" v-model="passForm.oldPassword" />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input  show-password size="small" v-model="passForm.newPassword" />
+        </el-form-item>
+        <el-form-item label="重复密码" prop="confirmPassword">
+          <el-input  show-password size="small" v-model="passForm.confirmPassword" />
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="btnOK">确认修改</el-button>
+          <el-button size="mini" @click="btnCancel">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -42,11 +69,45 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { updatePassword } from '@/api/user'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
+  },
+  data() {
+    return {
+      passForm:{
+        oldPassword:'', //旧密码
+        newPassword:'', //新密码
+        confirmPassword:'' //确认密码
+      },
+      rules: {
+        oldPassword: [{ required: true, message: '旧密码不能为空', trigger: 'blur' }], // 旧密码
+        newPassword: [{ required: true, message: '新密码不能为空', trigger: 'blur' }, {
+          trigger: 'blur',
+          min: 6,
+          max: 16,
+          message: '新密码的长度为6-16位之间'
+        }], // 新密码
+        confirmPassword: [{ required: true, message: '重复密码不能为空', trigger: 'blur' }, {
+          trigger: 'blur',
+          //细节:这里要使用箭头函数,因为我的passForm和validator一样在data里
+          //如果我validator不在data里就不能用箭头函数了,因为箭头函数的this不是vm
+          //而是外层作用域
+          validator: (rule, value, callback) => {
+            // value
+            if (this.passForm.newPassword === value) {
+              callback()
+            } else {
+              callback(new Error('重复密码和新密码输入不一致'))
+            }
+          }
+        }] // 确认密码字段
+      },
+      showDialog: false,
+    };
   },
   computed: {
     ...mapGetters([
@@ -62,6 +123,29 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push('/login')
+    },
+    updatePassword(){
+      this.showDialog = true //显示弹层
+    },
+    //确定
+    btnOK(){
+      this.$refs.passForm.validate(async (isOK) =>{
+        if(isOK){
+          //调用接口
+          await updatePassword(this.passForm)
+          this.$message.success('修改密码成功')
+          //成功了
+          this.$refs.passForm.resetFields() //重置表单
+          //关闭弹层
+          this.showDialog = false
+        }
+      })
+    },
+    //取消
+    btnCancel(){
+      this.$refs.passForm.resetFields() //重置表单
+      //关闭弹层
+      this.showDialog = false
     }
   }
 }

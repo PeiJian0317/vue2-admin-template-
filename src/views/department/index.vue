@@ -33,7 +33,8 @@
   </div>
 </template>
 <script>
-  import { getDepartment } from "@/api/department"
+import { getDepartment } from "@/api/department"
+import { transLisToTreeData } from "@/utils"
 export default {
   name: "Department",
   data() {
@@ -50,8 +51,8 @@ export default {
   },
   methods:{
     async getDepartment(){ //这个只是方法名
-    const result = await getDepartment() //这个才是接口名
-    this.depts = result
+      const result = await getDepartment() //这个才是接口名
+      this.depts = transLisToTreeData(result,0)
     }
   },
  

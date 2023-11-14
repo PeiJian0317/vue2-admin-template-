@@ -115,3 +115,18 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+//生成列表型数据转换树形
+export function transLisToTreeData(list,rootValue){
+  const arr = []
+  list.forEach((item) => {
+    if(item.pid === rootValue){
+      //找到根节点
+      arr.push(item)
+      //当前节点的id 和 当前节点的子节点的pid是相等的
+      const children = transLisToTreeData(list,item.id) //利用递归往下找子节点
+      item.children = children //将子节点赋给当前节点
+    }
+  })
+  return arr
+}

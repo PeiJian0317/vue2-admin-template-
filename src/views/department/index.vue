@@ -1,12 +1,65 @@
 <template>
   <div class="container">
     <div class="app-container">
-      组织架构
+      <!-- 展示树形组件 -->
+      <el-tree default-expand-all="" :data="depts" :props="defaultProps">
+        <template v-slot="{data}">
+          <!-- 节点结构 -->
+          <el-row
+            style="width: 100%"
+            type="flex"
+            justify="space-between"
+            align="middle"
+          >
+            <el-col>{{ data.name }}</el-col>
+            <el-col :span="4">
+              <span class="tree-manager">{{ data.managerName }}</span>
+              <el-dropdown>
+                <!-- 显示区域内容 -->
+                <span class="el-dropdown-link">
+                  操作<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>添加子部门</el-dropdown-item>
+                  <el-dropdown-item>编辑部门</el-dropdown-item>
+                  <el-dropdown-item>删除</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+          </el-row>
+        </template>
+      </el-tree>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Department'
-}
+  name: "Department",
+  data() {
+    return {
+      depts: [
+        {
+          name: "传智教育",
+          managerName:"管理员",
+          children: [
+            { name: "总裁办" ,managerName:"张三"},
+            { name: "行政部" ,managerName:"李四"},
+            { name: "财务部" ,managerName:"王五"},
+          ],
+        },
+      ], //数据
+      defaultProps: {
+        label: "name", //要显示的字段名
+        children: "children", //字段
+      },
+    };
+  },
+};
 </script>
+<style scoped>
+.tree-manager{
+  width: 50px;
+  display: inline-block;
+  margin: 10px;
+}
+</style>

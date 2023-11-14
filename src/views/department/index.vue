@@ -33,33 +33,34 @@
   </div>
 </template>
 <script>
+  import { getDepartment } from "@/api/department"
 export default {
   name: "Department",
   data() {
     return {
-      depts: [
-        {
-          name: "传智教育",
-          managerName:"管理员",
-          children: [
-            { name: "总裁办" ,managerName:"张三"},
-            { name: "行政部" ,managerName:"李四"},
-            { name: "财务部" ,managerName:"王五"},
-          ],
-        },
-      ], //数据
+      depts: [ ], //数据
       defaultProps: {
         label: "name", //要显示的字段名
         children: "children", //字段
       },
     };
   },
+  created(){
+    this.getDepartment() //调用methods里获取数据的接口
+  },
+  methods:{
+    async getDepartment(){ //这个只是方法名
+    const result = await getDepartment() //这个才是接口名
+    this.depts = result
+    }
+  },
+ 
 };
 </script>
 <style scoped>
 .tree-manager{
   width: 50px;
   display: inline-block;
-  margin: 10px;
+  margin-right: 55px;
 }
 </style>

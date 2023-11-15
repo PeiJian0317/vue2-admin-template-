@@ -2,7 +2,7 @@
   <div class="container">
     <div class="app-container">
       <!-- 展示树形组件 -->
-      <el-tree default-expand-all="" :data="depts" :props="defaultProps">
+      <el-tree default-expand-all="" :expand-on-click-node="false" :data="depts" :props="defaultProps">
         <template v-slot="{data}">
           <!-- 节点结构 -->
           <el-row
@@ -14,15 +14,15 @@
             <el-col>{{ data.name }}</el-col>
             <el-col :span="4">
               <span class="tree-manager">{{ data.managerName }}</span>
-              <el-dropdown>
+              <el-dropdown @command="handleCommand">
                 <!-- 显示区域内容 -->
                 <span class="el-dropdown-link">
                   操作<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>添加子部门</el-dropdown-item>
-                  <el-dropdown-item>编辑部门</el-dropdown-item>
-                  <el-dropdown-item>删除</el-dropdown-item>
+                  <el-dropdown-item command="add">添加子部门</el-dropdown-item>
+                  <el-dropdown-item command="edit">编辑部门</el-dropdown-item>
+                  <el-dropdown-item command="del">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -30,20 +30,31 @@
         </template>
       </el-tree>
     </div>
+    <!-- 放置弹层 -->
+    <!-- .sync表示会接收子组件的事件 -->
+    <add-dept :showDialog.sync="showDialog" />
   </div>
 </template>
 <script>
 import { getDepartment } from "@/api/department"
 import { transLisToTreeData } from "@/utils"
+import addDeptVue from './components/add-dept.vue';
+import addDept from './components/add-dept.vue';
 export default {
+  components: { addDept },
   name: "Department",
   data() {
     return {
+      showDialog: false, //控制弹层显示和隐藏
       depts: [ ], //数据
       defaultProps: {
         label: "name", //要显示的字段名
         children: "children", //字段
       },
+      components: {
+        addDeptVue
+}
+
     };
   },
   created(){
@@ -53,6 +64,12 @@ export default {
     async getDepartment(){ //这个只是方法名
       const result = await getDepartment() //这个才是接口名
       this.depts = transLisToTreeData(result,0)
+    },
+    handleCommand(command){
+      if(command === "add"){
+        //添加子部门,调用封装的弹层组件
+        this.showDialog = true //显示弹层组件
+      }
     }
   },
  

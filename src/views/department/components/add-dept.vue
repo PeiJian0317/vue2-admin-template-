@@ -5,10 +5,29 @@
     width="30%"
     @close="close"
   >
-    <span>这是一段信息</span>
-    <span slot="footer" class="dialog-footer">
-      <el-button>取 消</el-button>
-    </span>
+   <el-form label-width="120px">
+      <el-form-item label="部门名称">
+        <el-input placeholder="2-10个字符" style="width: 80%;" size="mini"/>
+      </el-form-item>
+      <el-form-item label="部门编码">
+        <el-input placeholder="2-10个字符" style="width: 80%;" size="mini"/>
+      </el-form-item>
+      <el-form-item label="部门负责人">
+        <el-input placeholder="请选择负责人" style="width: 80%;" size="mini"/>
+      </el-form-item>
+      <el-form-item label="部门介绍">
+        <el-input placeholder="1-100个字符" type="textarea" :rows="4" style="width: 80%;" size="mini"/>
+      </el-form-item>
+      <el-form-item>
+        <!-- 按钮 -->
+        <el-row type="flex" justify="center">
+          <el-col :span="12">
+            <el-button type="primary" size="mini">确认</el-button>
+            <el-button  size="mini"> 取消</el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
+   </el-form>
   </el-dialog>
 </template>
 

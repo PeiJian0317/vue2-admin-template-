@@ -9,6 +9,13 @@
       </el-form-item>
       <el-form-item prop="managerId" label="部门负责人">
         <el-select v-model="formData.managerId" placeholder="请选择负责人" style="width: 80%" size="mini">
+          <!-- 下拉选项 循环负责人数据 -->
+          <el-option v-for="item in ManagerList"
+           :key="item.id" 
+           :label="item.username"
+           :value="item.id"
+           >
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="introduce" label="部门介绍">
@@ -28,12 +35,13 @@
 </template>
 
 <script>
-import {getDepartment} from '@/api/department'
+import {getDepartment,getManagerList} from '@/api/department'
 export default {
   name: "addDeptVue",
   data() {
     return {
       formData: {
+        ManagerList:[], //负责人列表
         code: "", // 部门编码
         introduce: "", // 部门介绍
         managerId: "", // 部门负责人id
@@ -116,7 +124,13 @@ export default {
     close() {
       this.$emit("update:showDialog", false);
     },
+    async getManagerList(){
+      this.ManagerList = await getManagerList()
+    }
   },
+  created(){
+    this.getManagerList()
+  }
 };
 </script>
 

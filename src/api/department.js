@@ -30,3 +30,12 @@ export function getDepartmentDetail(id){
         url:`/company/department/${id}`
     })
 }
+
+//封装更新部门详情的api
+export function updateDepartment(data){
+    return request({
+        url:`/company/department/${data.id}`,
+        method:'put',
+        data
+    })
+}

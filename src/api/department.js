@@ -14,3 +14,12 @@ export function getManagerList(){
         method:'get'
     })
 }
+
+//封装新增部门的api
+export function addDepartment(data){
+    return request({
+        url:'/company/department',
+        method:'post',
+        data
+    })
+}

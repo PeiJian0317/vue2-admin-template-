@@ -2,7 +2,7 @@
   <div class="container">
     <div class="app-container">
       <!-- 展示树形组件 -->
-      <el-tree default-expand-all="" :expand-on-click-node="false" :data="depts" :props="defaultProps">
+      <el-tree default-expand-all=""  :expand-on-click-node="false" :data="depts" :props="defaultProps">
         <template v-slot="{data}">
           <!-- 节点结构 -->
           <el-row
@@ -32,7 +32,7 @@
     </div>
     <!-- 放置弹层 -->
     <!-- .sync表示会接收子组件的事件 -->
-    <add-dept :currentID="currentID" :showDialog.sync="showDialog" />
+    <add-dept @updateDepartment="getDepartment" :currentID="currentID" :showDialog.sync="showDialog" />
   </div>
 </template>
 <script>

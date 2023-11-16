@@ -25,8 +25,8 @@
         <!-- 按钮 -->
         <el-row type="flex" justify="center">
           <el-col :span="12">
-            <el-button size="mini" type="primary" >确定</el-button>
-            <el-button size="mini" >取消</el-button>
+            <el-button size="mini" type="primary" @click="btnOK">确定</el-button>
+            <el-button size="mini" @click="close">取消</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {getDepartment,getManagerList} from '@/api/department'
+import {getDepartment,getManagerList,addDepartment} from '@/api/department'
 export default {
   name: "addDeptVue",
   data() {
@@ -127,9 +127,23 @@ export default {
   methods: {
     close() {
       this.$emit("update:showDialog", false);
+      this.$refs.addDept.resetFields() //重置表单
     },
     async getManagerList(){
       this.ManagerList = await getManagerList()
+    },
+    btnOK(){
+      this.$refs.addDept.validate(async (isOK) => {
+        if(isOK){
+          //校验通过
+          await addDepartment({ ...this.formData, pid:this.currentID})
+          //通知父组件更新 -->利用自定义事件
+          this.$emit('updateDepartment')
+          //提示消息
+          this.$message.success('新增部门成功')
+          this.close()
+        }
+      })
     }
   },
   created(){

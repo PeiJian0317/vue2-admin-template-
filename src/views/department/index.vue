@@ -32,7 +32,7 @@
     </div>
     <!-- 放置弹层 -->
     <!-- .sync表示会接收子组件的事件 -->
-    <add-dept @updateDepartment="getDepartment" :currentID="currentID" :showDialog.sync="showDialog" />
+    <add-dept ref="addDept" @updateDepartment="getDepartment" :currentID="currentID" :showDialog.sync="showDialog" />
   </div>
 </template>
 <script>
@@ -70,8 +70,17 @@ export default {
       if(command === "add"){
         //添加子部门,调用封装的弹层组件
         this.showDialog = true //显示弹层组件
+        this.currentID = id
+      }else if(command === "edit"){
+        //编辑部门场景
+        this.showDialog = true
+        this.currentID = id //记录id 要用它获取数据
+        //要在子组件获取数据,父组件调用子组件的方法来获取数据 ->利用ref
+        //当ref写在组件标签上时,ref此时获取到的是组件的实例对象vc
+        this.$nextTick(() =>{
+          this.$refs.addDept.getDepartmentDetail()
+        })
       }
-      this.currentID = id
     }
   },
  

@@ -23,3 +23,10 @@ export function addDepartment(data){
         data
     })
 }
+
+//封装一个获取部门详情的api
+export function getDepartmentDetail(id){
+    return request({
+        url:`/company/department/${id}`
+    })
+}

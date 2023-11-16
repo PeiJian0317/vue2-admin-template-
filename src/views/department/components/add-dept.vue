@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {getDepartment,getManagerList,addDepartment} from '@/api/department'
+import {getDepartment,getManagerList,addDepartment,getDepartmentDetail} from '@/api/department'
 export default {
   name: "addDeptVue",
   data() {
@@ -144,6 +144,10 @@ export default {
           this.close()
         }
       })
+    },
+    //获取组织的详情
+    async getDepartmentDetail(){
+      this.formData = await getDepartmentDetail(this.currentID)
     }
   },
   created(){

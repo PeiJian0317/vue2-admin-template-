@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       formData: {
-        ManagerList:[], //负责人列表
+        ManagerList:[], // 负责人列表
         code: "", // 部门编码
         introduce: "", // 部门介绍
         managerId: "", // 部门负责人id
@@ -58,20 +58,22 @@ export default {
             trigger: "blur",
           },{
             trigger:'blur',
-            //自定义校验规则
-            async validator(rule,value,callback){
-              //获取返回响应过来的data数据
-              const result = await getDepartment()
-              //查看result数据中是否存在value值
+            // 自定义校验模式
+            validator:async (rule,value,callback) =>{
+              let result = await getDepartment()
+              //判断当前是否为编辑模式 ->如为编辑模式则有id
+              if(this.formData.id){
+                result = result.filter(item => item.id !== this.formData.id)
+              }
+
+              //查看result中是否有编码
               if(result.some(item => item.code === value)){
-                //校验失败
-                callback(new Error('部门中已经有该编码了'))
+                callback(new Error('部门中已经有编码了'))
               }else{
-                //校验成功
                 callback()
               }
             }
-          }
+        }
         ], // 部门编码
         introduce: [
           { required: true, message: "部门介绍不能为空", trigger: "blur" },
@@ -96,15 +98,17 @@ export default {
           {
             trigger:'blur',
             //自定义校验规则
-            async validator(rule,value,callback){
-              //获取返回响应过来的data数据
-              const result = await getDepartment()
-              //查看result数据中是否存在value值
-              if(result.some(item => item.name === value)){
-                //校验失败
+            validator: async(rule, value, callback) => {
+              // value就是输入的名称
+              let result = await getDepartment()
+              if (this.formData.id) {
+                // 编辑场景 排除自身
+                result = result.filter(item => item.id !== this.formData.id)
+              }
+              // result数组中是否存在 value值
+              if (result.some(item => item.name === value)) {
                 callback(new Error('部门中已经有该名称了'))
-              }else{
-                //校验成功
+              } else {
                 callback()
               }
             }

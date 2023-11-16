@@ -14,7 +14,7 @@
             <el-col>{{ data.name }}</el-col>
             <el-col :span="4">
               <span class="tree-manager">{{ data.managerName }}</span>
-              <el-dropdown @command="handleCommand">
+              <el-dropdown @command="handleCommand($event,data.id)">
                 <!-- 显示区域内容 -->
                 <span class="el-dropdown-link">
                   操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -32,7 +32,7 @@
     </div>
     <!-- 放置弹层 -->
     <!-- .sync表示会接收子组件的事件 -->
-    <add-dept :showDialog.sync="showDialog" />
+    <add-dept :currentID="currentID" :showDialog.sync="showDialog" />
   </div>
 </template>
 <script>
@@ -45,6 +45,7 @@ export default {
   name: "Department",
   data() {
     return {
+      currentID: null, //当前的id
       showDialog: false, //控制弹层显示和隐藏
       depts: [ ], //数据
       defaultProps: {
@@ -65,11 +66,12 @@ export default {
       const result = await getDepartment() //这个才是接口名
       this.depts = transLisToTreeData(result,0)
     },
-    handleCommand(command){
+    handleCommand(command,id){
       if(command === "add"){
         //添加子部门,调用封装的弹层组件
         this.showDialog = true //显示弹层组件
       }
+      this.currentID = id
     }
   },
  

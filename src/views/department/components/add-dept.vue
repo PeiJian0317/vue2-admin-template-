@@ -119,6 +119,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    currentID:{
+      type: Number,
+      default: null
+    }
   },
   methods: {
     close() {

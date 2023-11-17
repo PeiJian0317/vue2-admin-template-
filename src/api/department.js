@@ -39,3 +39,11 @@ export function updateDepartment(data){
         data
     })
 }
+
+//封装删除部门接口
+export function deleteDepartment(id){
+    return request({
+        url:`/company/department/${id}`,
+        method:'delete'
+    })
+}

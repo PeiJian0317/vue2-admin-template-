@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { getDepartment } from "@/api/department"
+import { getDepartment,deleteDepartment } from "@/api/department"
 import { transLisToTreeData } from "@/utils"
 import addDeptVue from './components/add-dept.vue';
 import addDept from './components/add-dept.vue';
@@ -79,6 +79,14 @@ export default {
         //当ref写在组件标签上时,ref此时获取到的是组件的实例对象vc
         this.$nextTick(() =>{
           this.$refs.addDept.getDepartmentDetail()
+        })
+      }else if(command === 'del'){
+        //删除部门
+        this.$confirm('您确认要删除该部门吗').then(async () =>{
+          await deleteDepartment(id)
+          //提示消息
+          this.$message.success('删除部门成功')
+          this.getDepartment()
         })
       }
     }

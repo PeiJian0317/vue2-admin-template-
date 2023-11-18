@@ -41,15 +41,15 @@
     <!-- 放置弹层 -->
     <el-dialog :visible.sync="showDialog" title="新增角色" width="500px">
       <!-- 表单内容 -->
-      <el-form label-width="120px">
-        <el-form-item label="角色名称">
-          <el-input style="width: 300px;" size="mini"/>
+      <el-form ref="roleForm" label-width="120px" :model="roleForm" :rules="rules">
+        <el-form-item label="角色名称" prop="name">
+          <el-input style="width: 300px;" size="mini" v-model="roleForm.name"/>
         </el-form-item>
         <el-form-item label="启用">
-          <el-switch size="mini"/>
+          <el-switch size="mini" v-model="roleForm.state" :active-value="1" :inactive-value="0"/>
         </el-form-item>
-        <el-form-item label="角色描述">
-          <el-input type="textarea" style="width: 300px;" size="mini"/>
+        <el-form-item label="角色描述" prop="description">
+          <el-input type="textarea" style="width: 300px;" size="mini" v-model="roleForm.description"/>
         </el-form-item>
         <el-form-item>
           <el-row type="flex" justify="center">
@@ -76,7 +76,16 @@ export default {
         pagesize:5, //每页有多少条数据
         total:0
       },
-      showDialog:false
+      showDialog:false,
+      roleForm: {
+        name: '',
+        description: '',
+        state: 0 // 默认未1启用 关闭 0 打开1
+      },
+      rules: {
+        name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
+        description: [{ required: true, message: '角色描述不能为空', trigger: 'blur' }]
+      }
     };
   },
   created(){

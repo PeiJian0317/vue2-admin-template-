@@ -11,3 +11,14 @@ export function getRoleList(params){
     })
 
 }
+/***
+ * 封装新增角色接口
+ * **/
+export function addRoleList(data){
+    return request({
+        url:'/sys/role',
+        method:'post',
+        data
+    })
+    
+}

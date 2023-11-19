@@ -8,6 +8,8 @@
           prefix-icon="el-icon-search"
           size="small"
           placeholder="输入员工姓名全员搜索"
+          @input="changeValue"
+          v-model="queryParams.keyword"
         />
         <!-- 树形组件 -->
         <el-tree
@@ -87,6 +89,7 @@ export default {
         page:1, //当前页码
         pagesize:10,
         departmentId: null,
+        keyword: '' // 模糊搜索字段
       },
       list:[], //存储员工列表数据
       total:0 //记录当前查询员工的总数
@@ -124,6 +127,19 @@ export default {
     changePage(newPage){
       this.queryParams.page = newPage //赋值新页码
       this.getEmployeeList() //查询数据
+    },
+    //当input里的值发生修改时
+    changeValue(){
+      //利用定时器来节流和防抖
+      clearTimeout(this.timer) //清除定时器
+
+      this.timer = setTimeout(() =>{
+        this.queryParams.page = 1
+        this.getEmployeeList()
+      },500)
+      //定时器500ms后会销毁,如果500ms内重新输入了就清楚定时器
+      //否则就等500ms后再执行定时器里的逻辑
+     
     }
   },
 };

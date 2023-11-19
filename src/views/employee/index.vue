@@ -132,7 +132,7 @@ export default {
     changeValue(){
       //利用定时器来节流和防抖
       clearTimeout(this.timer) //清除定时器
-
+      //this的实例上赋值了一个timer属性
       this.timer = setTimeout(() =>{
         this.queryParams.page = 1
         this.getEmployeeList()

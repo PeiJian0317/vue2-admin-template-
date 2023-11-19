@@ -11,20 +11,21 @@
         <el-table-column prop="name" align="center" width="200px" label="角色">
           <template v-slot="{ row }">
           <!-- 条件判断 -->
-          <el-input v-if="row.isEdit" size="mini" />
+          <el-input v-if="row.isEdit" size="mini" v-model="row.editRow.name" />
           <span v-else>{{ row.name }}</span>
       </template>
         </el-table-column>
         <el-table-column prop="state" align="center" width="200px" label="启用" >
           <template slot-scope="scope">
-            <el-switch v-if="scope.row.isEdit"></el-switch>
+            <!-- 开为1,关为0 -->
+            <el-switch v-if="scope.row.isEdit" v-model="scope.row.editRow.state" :active-value="1" :inactive-value="0"></el-switch>
             <span v-else style="margin-left: 10px">{{ scope.row.state === 1 ? '已启用' : scope.row.state === 0 ? '未启用' : '无' }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="description" align="center" label="描述">
           <template v-slot="{ row }">
             <!-- 条件判断 -->
-            <el-input type="textarea" v-if="row.isEdit" size="mini" />
+            <el-input  type="textarea" v-if="row.isEdit" size="mini" v-model="row.editRow.description"/>
             <span v-else>{{ row.description }}</span>
           </template>
 
@@ -121,6 +122,11 @@ export default {
       this.list.forEach(item =>{
         // item.isEdit = false 
         this.$set(item,'isEdit',false) //新增数据必须是响应式的 ->响应式就要用$set
+        this.$set(item,'editRow',{    //对数据进行缓存
+          name:item.name,
+          state:item.state,
+          description:item.description
+        })
       })
     },
     //切换分页时请求新的数据
@@ -142,7 +148,11 @@ export default {
     },
     //点击编辑
     btnEditRow(row){
-      row.isEdit = true
+      row.isEdit = true //改变行的状态
+      //更新缓存数据 ->每次点击编辑更新缓存里的数据
+      row.editRow.name = row.name
+      row.editRow.state = row.state
+      row.editRow.description = row.description
     }
   }
 }

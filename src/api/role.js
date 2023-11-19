@@ -32,3 +32,13 @@ export function updateRole(data){
         data
     })
 }
+
+/***
+ * 封装一个删除角色的api
+ * **/
+export function delRole(id){
+    return request({
+        url:`/sys/role/${id}`,
+        method:'delete'
+    })
+}

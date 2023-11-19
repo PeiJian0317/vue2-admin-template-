@@ -41,7 +41,9 @@
           <!-- 放置操作按钮 ---非编辑状态下 -->
             <el-button size="mini" type="text">分配权限</el-button>
             <el-button @click="btnEditRow(row)" size="mini" type="text">编辑</el-button>
-            <el-button size="mini" type="text">删除</el-button>
+            <el-popconfirm  title="这是一段内容确定删除吗？" @onConfirm="confirmDel(row.id)">
+              <el-button style="margin-left:10px ;" size="mini" type="text" slot="reference">删除</el-button>
+            </el-popconfirm>
           </template>
         </template>
         </el-table-column>
@@ -85,7 +87,7 @@
   </div>
 </template>
 <script>
-import { getRoleList,addRoleList,updateRole } from '@/api/role';
+import { getRoleList,addRoleList,updateRole,delRole } from '@/api/role';
 export default {
   name: 'Role',
   data() {
@@ -169,6 +171,14 @@ export default {
       }else{
         this.$message.warning('角色和描述不能为空')
       }
+    },
+    //点击删除
+    async confirmDel(id){
+      await delRole(id) //后端删除
+      this.$message.success('删除角色成功')
+      //删除的如果是最后一个数据
+      if(this.list.length === 1) this.pageParams.page--
+      this.getRoleList()
     }
   }
 }

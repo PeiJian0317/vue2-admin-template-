@@ -28,14 +28,14 @@
           <el-button size="mini">excel导出</el-button>
         </el-row>
         <!-- 表格组件 -->
-        <el-table>
-          <el-table-column label="头像" align="center" />
-          <el-table-column label="姓名" />
-          <el-table-column label="手机号" sortable />
-          <el-table-column label="工号" sortable />
-          <el-table-column label="聘用形式" />
-          <el-table-column label="部门" />
-          <el-table-column label="入职时间" sortable />
+        <el-table :data="list">
+          <el-table-column prop="staffPhoto" label="头像" align="center" />
+          <el-table-column prop="username" label="姓名" />
+          <el-table-column prop="mobile" label="手机号" sortable />
+          <el-table-column prop="workNumber" label="工号" sortable />
+          <el-table-column prop="formOfEmployment" label="聘用形式" />
+          <el-table-column prop="departmentName" label="部门" />
+          <el-table-column prop="timeOfEntry" label="入职时间" sortable />
           <el-table-column label="操作" width="280px">
             <template>
               <el-button size="mini" type="text">查看</el-button>
@@ -59,6 +59,7 @@
 <script>
 import { getDepartment } from "@/api/department";
 import { transLisToTreeData } from "@/utils";
+import { getEmployeeList } from '@/api/employee'
 export default {
   name: "Employee",
   data() {
@@ -71,6 +72,7 @@ export default {
       queryParams: {
         departmentId: null,
       },
+      list:[] //存储员工列表数据
     };
   },
   created() {
@@ -84,13 +86,21 @@ export default {
       //设置选中节点
       //树组件渲染是异步的
       this.$nextTick(() => {
-        //此时表示树组件渲染完毕
+        //此时表示树组件渲染完毕,设置默认(传智教育)高亮
         this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId);
       });
+      this.getEmployeeList()
     },
+    //当节点更换时触发的方法
     selectNode(node) {
       this.queryParams.departmentId = node.id;
+      this.getEmployeeList()
     },
+    //获取员工列表
+    async getEmployeeList(){
+      const { rows } = await getEmployeeList(this.queryParams)
+      this.list = rows
+    }
   },
 };
 </script>

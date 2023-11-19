@@ -20,5 +20,15 @@ export function addRoleList(data){
         method:'post',
         data
     })
-    
+}
+
+/***
+ * 封装一个更新角色的接口
+ * **/
+export function updateRole(data){
+    return request({
+        url:`/sys/role/${data.id}`,
+        method:'put',
+        data
+    })
 }

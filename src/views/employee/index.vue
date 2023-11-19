@@ -4,10 +4,14 @@
       <div class="left">
         <el-input style="margin-bottom:10px" type="text" prefix-icon="el-icon-search" size="small" placeholder="输入员工姓名全员搜索" />
         <!-- 树形组件 -->
-        <el-tree :data="depts"
+        <el-tree 
+          ref="deptTree"
+          node-key="id"
+         :data="depts"
          :props="defaultProps" 
          :expand-on-click-node="false"
          :highlight-current="true"
+         @current-change="selectNode"
          >
         </el-tree>
       </div>
@@ -35,7 +39,10 @@ export default {
       defaultProps: {
           children: 'children',
           label: 'name'
-        }
+        },
+      queryParams: {
+        departmentId: null
+      }
     };
   },
   created(){
@@ -44,6 +51,17 @@ export default {
   methods:{
     async getDepartment(){
       this.depts = transLisToTreeData(await getDepartment(),0)
+      //初始化获取首个节点 -->传智教育 (记录下该节点)
+      this.queryParams.departmentId = this.depts[0].id
+      //设置选中节点
+      //树组件渲染是异步的
+      this.$nextTick(() =>{
+        //此时表示树组件渲染完毕
+        this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId)
+      })
+    },
+    selectNode(node){
+      this.queryParams.departmentId = node.id
     }
   }
 }

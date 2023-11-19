@@ -2,17 +2,23 @@
   <div class="container">
     <div class="app-container">
       <div class="left">
-        <el-input style="margin-bottom:10px" type="text" prefix-icon="el-icon-search" size="small" placeholder="输入员工姓名全员搜索" />
+        <el-input
+          style="margin-bottom: 10px"
+          type="text"
+          prefix-icon="el-icon-search"
+          size="small"
+          placeholder="输入员工姓名全员搜索"
+        />
         <!-- 树形组件 -->
-        <el-tree 
+        <el-tree
           ref="deptTree"
           node-key="id"
-         :data="depts"
-         :props="defaultProps" 
-         :expand-on-click-node="false"
-         :highlight-current="true"
-         @current-change="selectNode"
-         >
+          :data="depts"
+          :props="defaultProps"
+          :expand-on-click-node="false"
+          :highlight-current="true"
+          @current-change="selectNode"
+        >
         </el-tree>
       </div>
       <div class="right">
@@ -22,49 +28,71 @@
           <el-button size="mini">excel导出</el-button>
         </el-row>
         <!-- 表格组件 -->
+        <el-table>
+          <el-table-column label="头像" align="center" />
+          <el-table-column label="姓名" />
+          <el-table-column label="手机号" sortable />
+          <el-table-column label="工号" sortable />
+          <el-table-column label="聘用形式" />
+          <el-table-column label="部门" />
+          <el-table-column label="入职时间" sortable />
+          <el-table-column label="操作" width="280px">
+            <template>
+              <el-button size="mini" type="text">查看</el-button>
+              <el-button size="mini" type="text">角色</el-button>
+              <el-button size="mini" type="text">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         <!-- 分页 -->
+        <el-row style="height: 60px" align="middle" type="flex" justify="end">
+          <el-pagination 
+          layout="total,prev, pager, next" 
+          :total="1000" 
+          />
+        </el-row>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getDepartment } from '@/api/department';
-import { transLisToTreeData } from '@/utils';
+import { getDepartment } from "@/api/department";
+import { transLisToTreeData } from "@/utils";
 export default {
-  name: 'Employee',
+  name: "Employee",
   data() {
     return {
       depts: [],
       defaultProps: {
-          children: 'children',
-          label: 'name'
-        },
+        children: "children",
+        label: "name",
+      },
       queryParams: {
-        departmentId: null
-      }
+        departmentId: null,
+      },
     };
   },
-  created(){
-    this.getDepartment()
+  created() {
+    this.getDepartment();
   },
-  methods:{
-    async getDepartment(){
-      this.depts = transLisToTreeData(await getDepartment(),0)
+  methods: {
+    async getDepartment() {
+      this.depts = transLisToTreeData(await getDepartment(), 0);
       //初始化获取首个节点 -->传智教育 (记录下该节点)
-      this.queryParams.departmentId = this.depts[0].id
+      this.queryParams.departmentId = this.depts[0].id;
       //设置选中节点
       //树组件渲染是异步的
-      this.$nextTick(() =>{
+      this.$nextTick(() => {
         //此时表示树组件渲染完毕
-        this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId)
-      })
+        this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId);
+      });
     },
-    selectNode(node){
-      this.queryParams.departmentId = node.id
-    }
-  }
-}
+    selectNode(node) {
+      this.queryParams.departmentId = node.id;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,7 +108,7 @@ export default {
     flex: 1;
     padding: 20px;
     .opeate-tools {
-      margin:10px ;
+      margin: 10px;
     }
     .username {
       height: 30px;
@@ -89,11 +117,10 @@ export default {
       text-align: center;
       border-radius: 50%;
       color: #fff;
-      background: #04C9BE;
+      background: #04c9be;
       font-size: 12px;
-      display:inline-block;
+      display: inline-block;
     }
   }
 }
-
 </style>

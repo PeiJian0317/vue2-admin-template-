@@ -29,11 +29,22 @@
         </el-row>
         <!-- 表格组件 -->
         <el-table :data="list">
-          <el-table-column prop="staffPhoto" label="头像" align="center" />
+          <el-table-column prop="staffPhoto" label="头像" align="center">
+            <template v-slot="{ row }">
+              <el-avatar v-if="row.staffPhoto" :size="30" :src="row.staffPhoto"/>
+              <span v-else class="username">{{ row.username.charAt(0) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="username" label="姓名" />
           <el-table-column prop="mobile" label="手机号" sortable />
           <el-table-column prop="workNumber" label="工号" sortable />
-          <el-table-column prop="formOfEmployment" label="聘用形式" />
+          <el-table-column prop="formOfEmployment" label="聘用形式">
+            <template v-slot="{ row }">
+              <span v-if="row.formOfEmployment === 1">正式</span>
+              <span v-else-if ="row.formOfEmployment === 2">非正式</span>
+              <span v-else>无</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="departmentName" label="部门" />
           <el-table-column prop="timeOfEntry" label="入职时间" sortable />
           <el-table-column label="操作" width="280px">
@@ -48,7 +59,10 @@
         <el-row style="height: 60px" align="middle" type="flex" justify="end">
           <el-pagination 
           layout="total,prev, pager, next" 
-          :total="1000" 
+          :total='total'
+          :current-page='queryParams.page'
+          :page-size='queryParams.pagesize'
+          @current-change="changePage"
           />
         </el-row>
       </div>
@@ -70,9 +84,12 @@ export default {
         label: "name",
       },
       queryParams: {
+        page:1, //当前页码
+        pagesize:10,
         departmentId: null,
       },
-      list:[] //存储员工列表数据
+      list:[], //存储员工列表数据
+      total:0 //记录当前查询员工的总数
     };
   },
   created() {
@@ -91,15 +108,22 @@ export default {
       });
       this.getEmployeeList()
     },
-    //当节点更换时触发的方法
+    //当节点更换时触发的方法(更换部门)
     selectNode(node) {
       this.queryParams.departmentId = node.id;
       this.getEmployeeList()
+      this.queryParams.page = 1
     },
     //获取员工列表
     async getEmployeeList(){
-      const { rows } = await getEmployeeList(this.queryParams)
+      const { rows,total } = await getEmployeeList(this.queryParams)
       this.list = rows
+      this.total = total
+    },
+    //更换页码时
+    changePage(newPage){
+      this.queryParams.page = newPage //赋值新页码
+      this.getEmployeeList() //查询数据
     }
   },
 };

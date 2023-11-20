@@ -32,3 +32,13 @@ export function getExportTemplate(){
         responseType:'blob' //二进制文件流
     })
 }
+/**
+ * 封装一个上传用户excel的接口
+ * **/
+export function uploadExcel(data){
+    return request({
+        url:'/sys/user/import',
+        method:'post',
+        data //这里的data是form-data类型,因为要上传文件
+    })
+}

@@ -50,10 +50,15 @@
           <el-table-column prop="departmentName" label="部门" />
           <el-table-column prop="timeOfEntry" label="入职时间" sortable />
           <el-table-column label="操作" width="280px">
-            <template>
+            <template v-slot="{ row }">
               <el-button size="mini" type="text">查看</el-button>
               <el-button size="mini" type="text">角色</el-button>
-              <el-button size="mini" type="text">删除</el-button>
+              <el-popconfirm
+                title="这是一段内容确定删除吗？"
+                @onConfirm="confirmDel(row.id)"
+              >
+                <el-button slot="reference" size="mini" type="text" style="margin-left:10px">删除</el-button>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -77,7 +82,7 @@
 <script>
 import { getDepartment } from "@/api/department";
 import { transLisToTreeData } from "@/utils";
-import { getEmployeeList,exportEmployee } from '@/api/employee'
+import { getEmployeeList,exportEmployee,delEmployee } from '@/api/employee'
 import FileSaver from 'file-saver'
 import importExcel from './components/import-excel'
 export default {
@@ -153,6 +158,16 @@ export default {
      const result = await exportEmployee() //导出所有员工
      //console.log(result)  //使用一个npm包,将blob文件下载到本地
      FileSaver.saveAs(result,"员工信息表.xlsx") //下载文件
+    },
+    //消息气泡框的确定删除
+    async confirmDel(id){
+      //调用删除接口
+      await delEmployee(id)
+      //当数据只剩一个
+      if (this.list.length === 1 && this.queryParams.page > 1) this.queryParams.page--
+      //重新加载数据
+      this.getEmployeeList()
+      this.$message.success("删除员工成功")
     }
   },
 };

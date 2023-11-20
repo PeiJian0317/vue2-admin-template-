@@ -42,3 +42,13 @@ export function uploadExcel(data){
         data //这里的data是form-data类型,因为要上传文件
     })
 }
+
+/**
+ * 封装一个删除员工的接口
+ * **/
+export function delEmployee(id){
+    return request({
+        url:`/sys/user/${id}`,
+        method:'delete'
+    })
+}

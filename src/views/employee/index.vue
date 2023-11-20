@@ -26,8 +26,8 @@
       <div class="right">
         <el-row class="opeate-tools" type="flex" justify="end">
           <el-button size="mini" type="primary">添加员工</el-button>
-          <el-button size="mini">excel导入</el-button>
-          <el-button size="mini">excel导出</el-button>
+          <el-button size="mini" @click="showExcelDialog = true">excel导入</el-button>
+          <el-button size="mini" @click="exportEmployee">excel导出</el-button>
         </el-row>
         <!-- 表格组件 -->
         <el-table :data="list">
@@ -69,15 +69,22 @@
         </el-row>
       </div>
     </div>
+    <!-- 放置导入组件 -->
+    <import-excel :showExcelDialog.sync="showExcelDialog" />
   </div>
 </template>
 
 <script>
 import { getDepartment } from "@/api/department";
 import { transLisToTreeData } from "@/utils";
-import { getEmployeeList } from '@/api/employee'
+import { getEmployeeList,exportEmployee } from '@/api/employee'
+import FileSaver from 'file-saver'
+import importExcel from './components/import-excel'
 export default {
   name: "Employee",
+  components:{
+    importExcel
+  },
   data() {
     return {
       depts: [],
@@ -92,7 +99,8 @@ export default {
         keyword: '' // 模糊搜索字段
       },
       list:[], //存储员工列表数据
-      total:0 //记录当前查询员工的总数
+      total:0, //记录当前查询员工的总数
+      showExcelDialog: false //控制excel弹层是否显示
     };
   },
   created() {
@@ -139,7 +147,12 @@ export default {
       },500)
       //定时器500ms后会销毁,如果500ms内重新输入了就清楚定时器
       //否则就等500ms后再执行定时器里的逻辑
-     
+    },
+    //导入员工excel
+    async exportEmployee(){
+     const result = await exportEmployee() //导出所有员工
+     //console.log(result)  //使用一个npm包,将blob文件下载到本地
+     FileSaver.saveAs(result,"员工信息表.xlsx") //下载文件
     }
   },
 };

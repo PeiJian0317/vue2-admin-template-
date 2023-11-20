@@ -21,7 +21,8 @@ service.interceptors.request.use((config) =>{
 
 //响应拦截器
 service.interceptors.response.use((response) =>{
-  const {data,message,success} = response.data
+  if(response.data instanceof Blob) return response.data //返回Blob对象
+  const {data,message,success} = response.data //默认为json格式的
   //对接口文档的响应体进行分析,发现这三个是每个接口都有的,所以把他们解构
   //如果success为true就返回解构的data
   if(success){

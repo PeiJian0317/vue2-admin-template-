@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <div class="edit-form">
-        <el-form ref="userForm" label-width="220px" :rules="rules" v-model="userInfo">
+        <el-form ref="userForm" label-width="220px" :rules="rules" :model="userInfo">
           <!-- 姓名 部门 -->
           <el-row>
             <el-col :span="12">
@@ -31,6 +31,7 @@
             <el-col :span="12">
               <el-form-item label="部门" prop="departmentId">
                 <!-- 放置及联部门组件 -->
+                <select-tree class="inputW"></select-tree>
               </el-form-item>
             </el-col>
           </el-row>
@@ -90,7 +91,9 @@
 </template>
 
 <script>
+import selectTree from './components/select-tree.vue';
 export default {
+  components:{selectTree},
   data() {
     return {
       userInfo: {

@@ -11,8 +11,7 @@ export default {
       icon: 'people'
     }
   },{
-    path:'detail',
-    name:'detail',
+    path:'detail/:id?',
     component:() => import('@/views/employee/detail.vue'),
     hidden:true,
     meta:{

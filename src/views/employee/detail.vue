@@ -92,7 +92,7 @@
 
 <script>
 import selectTree from './components/select-tree.vue';
-import { addEmployee } from '@/api/employee'
+import { addEmployee,getEmployeeDetail } from '@/api/employee'
 export default {
   components:{selectTree},
   data() {
@@ -150,6 +150,13 @@ export default {
       },
     };
   },
+  created(){
+    //获取路由参数中的id
+    const id = this.$route.params.id
+    if(id){
+      this.getEmployeeDetail()
+    }
+  },
   methods: {
     saveData() {
       this.$refs.userForm.validate(async (isOK) =>{
@@ -161,6 +168,9 @@ export default {
         }
       });
     },
+    async getEmployeeDetail(){
+     this.userInfo = await getEmployeeDetail(this.$route.params.id)
+    }
   },
 };
 </script>

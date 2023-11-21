@@ -4,7 +4,7 @@
   size="mini" 
   :props="props" 
   separator="-"
-  value="value"
+  :value="value"
   @change="selectChange"
   />
 </template>
@@ -21,6 +21,12 @@ export default {
         value: "id",
       },
     };
+  },
+  props:{
+    value:{
+        type:Number,
+        default:null
+    }
   },
   created() {
     this.getDepartment();

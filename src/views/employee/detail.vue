@@ -31,7 +31,7 @@
             <el-col :span="12">
               <el-form-item label="部门" prop="departmentId">
                 <!-- 放置及联部门组件 -->
-                <select-tree class="inputW"></select-tree>
+                <select-tree class="inputW" v-model="userInfo.departmentId"></select-tree>
               </el-form-item>
             </el-col>
           </el-row>

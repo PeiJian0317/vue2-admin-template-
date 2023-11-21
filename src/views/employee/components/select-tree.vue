@@ -4,6 +4,8 @@
   size="mini" 
   :props="props" 
   separator="-"
+  value="value"
+  @change="selectChange"
   />
 </template>
 
@@ -28,6 +30,13 @@ export default {
       const result = await getDepartment();
       this.treeData = transLisToTreeData(result, 0);
     },
+    selectChange(list){
+        if(list.length > 0){
+            this.$emit('input',list[list.length - 1]) //取出最后一位id
+        }else{
+            this.$emit('input',null)
+        }
+    }
   },
 };
 </script>

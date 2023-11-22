@@ -27,7 +27,7 @@
                 size="mini" 
                 class="inputW" 
                 v-model="userInfo.mobile"
-                :disabled="!!this.$route.params.id"
+                :disabled="this.$route.params.id"
                 />
               </el-form-item>
             </el-col>
@@ -80,6 +80,7 @@
             <el-col :span="12">
               <el-form-item label="员工头像">
                 <!-- 放置上传图片 -->
+                <image-upload v-model="userInfo.staffPhoto"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -98,8 +99,9 @@
 <script>
 import selectTree from './components/select-tree.vue';
 import { addEmployee,getEmployeeDetail,updateEmployee } from '@/api/employee'
+import imageUpload from './components/image-upload.vue';
 export default {
-  components:{selectTree},
+  components:{selectTree,imageUpload},
   data() {
     return {
       userInfo: {
@@ -110,6 +112,7 @@ export default {
         departmentId: null, // 部门id
         timeOfEntry: "", // 入职时间
         correctionTime: "", // 转正时间
+        staffPhoto:"https://p.qqan.com/up/2021-7/2021781010213286.png",//员工的头像地址
       },
       rules: {
         username: [

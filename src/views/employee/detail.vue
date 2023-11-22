@@ -23,7 +23,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="手机" prop="mobile">
-                <el-input size="mini" class="inputW" v-model="userInfo.mobile"/>
+                <el-input 
+                size="mini" 
+                class="inputW" 
+                v-model="userInfo.mobile"
+                :disabled="!!this.$route.params.id"
+                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -92,7 +97,7 @@
 
 <script>
 import selectTree from './components/select-tree.vue';
-import { addEmployee,getEmployeeDetail } from '@/api/employee'
+import { addEmployee,getEmployeeDetail,updateEmployee } from '@/api/employee'
 export default {
   components:{selectTree},
   data() {
@@ -159,13 +164,21 @@ export default {
   },
   methods: {
     saveData() {
-      this.$refs.userForm.validate(async (isOK) =>{
-        if(isOK){
-          //表单校验通过
-          await addEmployee(this.userInfo)
-          this.$message.success('新增员工成功')
-          this.$router.push('/employee')
-        }
+        this.$refs.userForm.validate(async (isOK) =>{
+          if(isOK){
+            //表单校验通过
+            //查看是否为编辑模式(路由参数有id时为编辑模式)
+            if(this.$route.params.id){
+              //id存在 -->编辑模式  -->调用编辑接口
+              await updateEmployee(this.userInfo)
+              this.$message.success('更新员工成功')
+            }else{
+              //id不存在 --->新增员工
+              await addEmployee(this.userInfo)
+              this.$message.success('新增员工成功')
+            }
+            this.$router.push('/employee')
+          }
       });
     },
     async getEmployeeDetail(){

@@ -76,6 +76,7 @@ import COS from 'cos-js-sdk-v5'
             Body:params.file //文件对象
         },(err,data) =>{
             //err表示错误信息,data返回信息
+            console.log(err,data)
             if(data.statusCode === 200 && data.Location){
                 //如果状态码200且有地址的话 -->说明拿到了腾讯云返回的地址
                 //此时需要通过$emit触发input事件,让组件标签上的v-model实现

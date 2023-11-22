@@ -27,7 +27,7 @@
                 size="mini" 
                 class="inputW" 
                 v-model="userInfo.mobile"
-                :disabled="this.$route.params.id"
+                :disabled="!!this.$route.params.id"
                 />
               </el-form-item>
             </el-col>
@@ -112,7 +112,7 @@ export default {
         departmentId: null, // 部门id
         timeOfEntry: "", // 入职时间
         correctionTime: "", // 转正时间
-        staffPhoto:"https://p.qqan.com/up/2021-7/2021781010213286.png",//员工的头像地址
+        staffPhoto:"",//员工的头像地址
       },
       rules: {
         username: [

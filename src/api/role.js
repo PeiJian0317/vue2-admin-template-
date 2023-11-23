@@ -43,3 +43,13 @@ export function delRole(id){
     })
 }
 
+/**
+ * 封装一个分配角色权限的接口
+ * **/
+export function assignPer(data){
+    return request({
+        url:'/sys/role/assignPrem',
+        method:'put',
+        data
+    })
+}

@@ -151,17 +151,25 @@
       width="30%"
     >
       <el-tree
+        ref="permTree"
+        check-strictly
         :data="permissionData"
         show-checkbox
         node-key="id"
         :props="{ label : 'name' ,children : 'children'}"
         :default-checked-keys="permIds"
       />
+      <el-row type="flex" justify="center" slot="footer">
+        <el-col :span="8">
+          <el-button size="mini" type="primary" @click="btnPermissionOK">确定</el-button>
+          <el-button size="mini" @click="showPermissionDialog = false">取消</el-button>
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
 <script>
-import { getRoleList, addRoleList, updateRole, delRole,getRoleDetail } from "@/api/role";
+import { getRoleList, addRoleList, updateRole, delRole,getRoleDetail,assignPerm } from "@/api/role";
 import { getPermissionList } from "@/api/permission";
 import { transLisToTreeData } from "@/utils";
 export default {
@@ -274,6 +282,15 @@ export default {
       this.permIds = permIds
       this.showPermissionDialog = true
     },
+    //点击确定时触发
+    async btnPermissionOK(){
+      await assignPerm({
+        id:this.currentRoleId,
+        permIds:this.$refs.permTree.getCheckedKeys()
+      })
+      this.showPermissionDialog = false
+      this.$message.success('角色分配权限成功')
+    }
   },
 };
 </script>

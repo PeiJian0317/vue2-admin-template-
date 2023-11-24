@@ -64,7 +64,7 @@
             </template>
             <template v-else>
               <!-- 放置操作按钮 ---非编辑状态下 -->
-              <el-button size="mini" type="text" @click="btnPermission"
+              <el-button size="mini" type="text" @click="btnPermission(row.id)"
                 >分配权限</el-button
               >
               <el-button @click="btnEditRow(row)" size="mini" type="text"
@@ -153,13 +153,15 @@
       <el-tree
         :data="permissionData"
         show-checkbox
+        node-key="id"
         :props="{ label : 'name' ,children : 'children'}"
+        :default-checked-keys="permIds"
       />
     </el-dialog>
   </div>
 </template>
 <script>
-import { getRoleList, addRoleList, updateRole, delRole } from "@/api/role";
+import { getRoleList, addRoleList, updateRole, delRole,getRoleDetail } from "@/api/role";
 import { getPermissionList } from "@/api/permission";
 import { transLisToTreeData } from "@/utils";
 export default {
@@ -188,7 +190,9 @@ export default {
         ],
       },
       showPermissionDialog:false, //控制权限弹层是否显示
-      permissionData:[] //人员权限数据
+      permissionData:[], //人员权限数据
+      currentRoleId:null, //记录点击分配权限时,当前的id
+      permIds:[]//已有权限的列表
     };
   },
   created() {
@@ -262,9 +266,12 @@ export default {
       this.getRoleList();
     },
     //点击分配角色
-    async btnPermission() {
+    async btnPermission(id) {
       //跳出弹层
       this.permissionData = transLisToTreeData(await getPermissionList(),0) 
+      this.currentRoleId = id
+      const { permIds } = await getRoleDetail(id)
+      this.permIds = permIds
       this.showPermissionDialog = true
     },
   },

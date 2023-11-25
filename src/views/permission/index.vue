@@ -45,7 +45,7 @@
         <el-table-column label="描述" prop="description" />
         <el-table-column label="操作">
           <template v-slot="{ row }">
-            <el-button v-if="row.type === 1" type="text" size="mini" @click="addPermission(1,2)"
+            <el-button v-if="row.type === 1" type="text" size="mini" @click="addPermission(row.id,2)"
               >添加</el-button
             >
             <el-button type="text" size="mini" @click="editPermission(row.id)">编辑</el-button>

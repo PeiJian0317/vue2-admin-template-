@@ -261,7 +261,19 @@
 import CountTo from "vue-count-to";
 import { mapGetters } from "vuex";
 import { getHomeData, getMessageList } from "@/api/home";
-import * as echarts from "echarts";
+// 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口。
+import * as echarts from 'echarts/core';
+// 引入折线图，图表后缀都为 Chart
+import { LineChart } from 'echarts/charts';
+// 引入直角坐标系
+import { GridComponent } from 'echarts/components';
+// 引入 Canvas 渲染器，注意引入 CanvasRenderer 或者 SVGRenderer 是必须的一步
+import { CanvasRenderer } from 'echarts/renderers';
+echarts.use([
+  LineChart,
+  GridComponent,
+  CanvasRenderer
+])
 export default {
   components: {
     CountTo,

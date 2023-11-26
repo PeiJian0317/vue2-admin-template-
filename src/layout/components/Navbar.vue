@@ -238,7 +238,6 @@ export default {
           width: 30px;
           height: 30px;
           border-radius: 50px;
-          transform: rotate(100deg);
           margin-right: 10px;
         }
 
